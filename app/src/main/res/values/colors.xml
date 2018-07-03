@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/system_primary</color>
+    <color name="colorPrimaryDark">@color/system_background</color>
+    <color name="colorAccent">@color/system_primary</color>
+
+    <color name="system_primary">#f69314</color>
+    <color name="system_secondary">#2076c6</color>
+    <color name="system_tertiary">#ffff00</color>
+
+    <color name="system_background_light">#33353d</color>
+    <color name="system_background">#27292f</color>
+    <color name="system_background_dark">#22242a</color>
+
+    <color name="text_white_primary">#EEEEEE</color>
+    <color name="text_white_label">#a3a4a8</color>
+    <color name="text_white_label_divider">#a3a4a8</color>
+
+    <color name="color_green">#84b78e</color>
+    <color name="color_red">#d15d5e</color>
+</resources>

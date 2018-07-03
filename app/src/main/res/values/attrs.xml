@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoundProgressBar">
+        <attr name="rpb_progress_color" format="color" />
+        <attr name="rpb_background_color" format="color" />
+        <attr name="rpb_progress" format="float" />
+        <attr name="rpb_radius" format="dimension" />
+        <attr name="rpb_padding" format="dimension" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">DeviceUsageStats</string>
+
+    <string name="network_default_value">0</string>
+    <string name="network_value_format">%.2f</string>
+    <string name="network_value_format_no_point">%.0f</string>
+    <string name="network_packet_format">%.0fk</string>
+    <string name="network_bubble_format">%s\nWifi: %s   Mobile: %s</string>
+    <string name="network_switch_on">Received</string>
+    <string name="network_switch_off">Sent</string>
+    <string name="network_unit_tera">TB</string>
+    <string name="network_unit_giga">GB</string>
+    <string name="network_unit_mega">MB</string>
+    <string name="network_unit_kilo">kB</string>
+
+    <string name="app_usage_perc_format">%.2f%%</string>
+
+    <string name="transition_app_icon">appIcon</string>
+    <string name="transition_app_name">appName</string>
+</resources>

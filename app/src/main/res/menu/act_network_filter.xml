@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/today"
+        android:icon="@drawable/ic_tune_white_24dp"
+        android:title="Today" />
+    <item
+        android:id="@+id/week"
+        android:icon="@drawable/ic_tune_white_24dp"
+        android:title="Week" />
+    <item
+        android:id="@+id/month"
+        android:icon="@drawable/ic_tune_white_24dp"
+        android:title="Month" />
+    <item
+        android:id="@+id/last_month"
+        android:icon="@drawable/ic_tune_white_24dp"
+        android:title="Last month" />
+    <item
+        android:id="@+id/year"
+        android:icon="@drawable/ic_tune_white_24dp"
+        android:title="Year" />
+    <item
+        android:id="@+id/custom"
+        android:icon="@drawable/ic_tune_white_24dp"
+        android:title="Custom" />
+</menu>

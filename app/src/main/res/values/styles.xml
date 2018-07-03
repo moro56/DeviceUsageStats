@@ -1,0 +1,52 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:fontFamily">@font/sans_pro</item>
+        <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
+        <item name="android:windowBackground">@color/system_background</item>
+    </style>
+
+    <style name="AppTheme.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/AppTheme.ToolbarTextStyle</item>
+    </style>
+
+    <style name="AppTheme.ToolbarTextStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/sans_pro</item>
+        <item name="fontFamily">@font/sans_pro</item>
+    </style>
+
+    <style name="LightPopupTheme" parent="@style/ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- FONT -->
+    <style name="FontLight">
+        <item name="android:fontFamily">@font/sans_pro_light</item>
+        <item name="fontFamily">@font/sans_pro_light</item>
+    </style>
+
+    <style name="FontExtraLight">
+        <item name="android:fontFamily">@font/sans_pro_extralight</item>
+        <item name="fontFamily">@font/sans_pro_extralight</item>
+    </style>
+
+    <style name="FontSemibold">
+        <item name="android:fontFamily">@font/sans_pro_semibold</item>
+        <item name="fontFamily">@font/sans_pro_semibold</item>
+    </style>
+
+    <style name="FontBold">
+        <item name="android:fontFamily">@font/sans_pro_bold</item>
+        <item name="fontFamily">@font/sans_pro_bold</item>
+    </style>
+
+    <style name="FontBlack">
+        <item name="android:fontFamily">@font/sans_pro_black</item>
+        <item name="fontFamily">@font/sans_pro_black</item>
+    </style>
+</resources>

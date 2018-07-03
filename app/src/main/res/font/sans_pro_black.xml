@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        app:font="@font/source_sans_pro_black"
+        app:fontStyle="normal" />
+    <font
+        app:font="@font/source_sans_pro_blackit"
+        app:fontStyle="italic" />
+</font-family>
