@@ -228,7 +228,7 @@
                 app:layout_constraintStart_toStartOf="@+id/progress_foreground"
                 app:layout_constraintTop_toTopOf="@+id/progress_foreground" />
 
-            <com.github.mikephil.charting.charts.LineChart
+            <it.emperor.deviceusagestats.ui.views.CustomLineChart
                 android:id="@+id/network_chart"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"

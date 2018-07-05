@@ -9,5 +9,6 @@
     android:elevation="0dp"
     android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
     app:popupTheme="@style/LightPopupTheme"
+    app:subtitleTextColor="@color/text_white_label"
     app:titleTextColor="@android:color/white"
     tools:ignore="UnusedAttribute" />

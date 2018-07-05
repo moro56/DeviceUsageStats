@@ -20,7 +20,7 @@ import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.detail.appDetail
 import it.emperor.deviceusagestats.ui.usage.adapters.AppUsageStatsAdapter
 import it.emperor.deviceusagestats.ui.usage.model.AppUsageStatsMaps
-import kotlinx.android.synthetic.main.act_app_usage.*
+import kotlinx.android.synthetic.main.act_appusage.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.joda.time.DateTime
@@ -37,7 +37,7 @@ class Act_AppUsage : BaseActivity() {
     private var showInForeground = true
 
     override fun getLayoutId(): Int {
-        return R.layout.act_app_usage
+        return R.layout.act_appusage
     }
 
     override fun initVariables() {

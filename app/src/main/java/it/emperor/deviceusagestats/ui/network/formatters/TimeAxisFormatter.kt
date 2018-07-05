@@ -2,29 +2,35 @@ package it.emperor.deviceusagestats.ui.network.formatters
 
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
-import it.emperor.deviceusagestats.ui.network.model.NetworkStatsMapsTimeType
+import it.emperor.deviceusagestats.models.TimeType
 import org.joda.time.DateTime
 
-class TimeAxisFormatter(private val timeType: NetworkStatsMapsTimeType, private val times: List<Long>) : IAxisValueFormatter {
+class TimeAxisFormatter(private val timeType: TimeType, private val times: List<Long>) : IAxisValueFormatter {
 
     override fun getFormattedValue(value: Float, axis: AxisBase?): String {
         try {
             val realValue = times[value.toInt()] * getTimeDividet(timeType)
             when (timeType) {
-                NetworkStatsMapsTimeType.HOUR -> return DateTime(realValue).toString("HH:mm")
-                NetworkStatsMapsTimeType.DAY -> return DateTime(realValue).toString("dd MMM")
-                NetworkStatsMapsTimeType.MONTH -> return DateTime(realValue).toString("MMM")
+                TimeType.TODAY -> return DateTime(realValue).toString("HH:mm")
+                TimeType.WEEK -> return DateTime(realValue).toString("dd MMM")
+                TimeType.MONTH -> return DateTime(realValue).toString("dd MMM")
+                TimeType.LAST_MONTH -> return DateTime(realValue).toString("dd MMM")
+                TimeType.YEAR -> return DateTime(realValue).toString("MMM")
+                TimeType.CUSTOM -> return DateTime(realValue).toString("dd MMM")
             }
         } catch (ex: Exception) {
             return ""
         }
     }
 
-    private fun getTimeDividet(timeType: NetworkStatsMapsTimeType): Long {
+    private fun getTimeDividet(timeType: TimeType): Long {
         when (timeType) {
-            NetworkStatsMapsTimeType.HOUR -> return 1000
-            NetworkStatsMapsTimeType.DAY -> return 86400000
-            NetworkStatsMapsTimeType.MONTH -> return 2592000000
+            TimeType.TODAY -> return 1000
+            TimeType.WEEK -> return 86400000
+            TimeType.MONTH -> return 86400000
+            TimeType.LAST_MONTH -> return 86400000
+            TimeType.YEAR -> return 2592000000
+            TimeType.CUSTOM -> return 86400000
         }
     }
 }

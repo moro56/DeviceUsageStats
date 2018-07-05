@@ -22,7 +22,7 @@ import it.emperor.deviceusagestats.R
 import it.emperor.deviceusagestats.services.UsageService
 import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.network.Act_Network
-import it.emperor.deviceusagestats.ui.usage.Act_AppUsage
+import it.emperor.deviceusagestats.ui.usage.Act_AppUsage2
 import kotlinx.android.synthetic.main.act_main.*
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -68,7 +68,7 @@ class Act_Main : BaseActivity() {
             startActivity(Intent(this, Act_Network::class.java))
         })
         usage_title.setOnClickListener({
-            startActivity(Intent(this, Act_AppUsage::class.java))
+            startActivity(Intent(this, Act_AppUsage2::class.java))
         })
 
 //        val series = ValueLineSeries()

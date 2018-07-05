@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import it.emperor.deviceusagestats.App
 import it.emperor.deviceusagestats.R
+import it.emperor.deviceusagestats.models.TimeType
 import kotlinx.android.synthetic.main.toolbar.*
 import net.danlew.android.joda.JodaTimeAndroid
 
@@ -54,6 +55,17 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState?.let {
             saveInfos(outState)
+        }
+    }
+
+    protected fun updateToolbarSubtitleWithFilter(timeType: TimeType) {
+        when (timeType) {
+            TimeType.TODAY -> supportActionBar?.subtitle = getString(R.string.time_today)
+            TimeType.WEEK -> supportActionBar?.subtitle = getString(R.string.time_week)
+            TimeType.MONTH -> supportActionBar?.subtitle = getString(R.string.time_month)
+            TimeType.LAST_MONTH -> supportActionBar?.subtitle = getString(R.string.time_last_month)
+            TimeType.YEAR -> supportActionBar?.subtitle = getString(R.string.time_year)
+            TimeType.CUSTOM -> supportActionBar?.subtitle = getString(R.string.time_today)
         }
     }
 }

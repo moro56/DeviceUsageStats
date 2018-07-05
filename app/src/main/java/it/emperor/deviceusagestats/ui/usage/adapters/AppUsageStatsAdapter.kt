@@ -35,7 +35,7 @@ class AppUsageStatsAdapter(val context: Context, val appUsageStats: AppUsageStat
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_usage_app, parent, false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_appusage_app, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -49,7 +49,7 @@ class AppUsageStatsAdapter(val context: Context, val appUsageStats: AppUsageStat
                 ?: kotlin.run { Glide.with(context).clear(holder.icon) }
 
         holder.progress.setProgress(perc)
-        holder.progressPerc.text = context.getString(R.string.app_usage_perc_format).format(perc * 100f)
+        holder.progressPerc.text = context.getString(R.string.appusage_perc_format).format(perc * 100f)
 
         holder.row.setOnClickListener {
             rxBus.send(AppDetailEvent(appUsage.packageName, holder.icon, holder.name))

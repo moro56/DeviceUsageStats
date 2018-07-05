@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">DeviceUsageStats</string>
     <string name="app_network">Network Stats</string>
+    <string name="app_appusage">App Usage Stats</string>
 
     <string name="unit_tera">TB</string>
     <string name="unit_giga">GB</string>
     <string name="unit_mega">MB</string>
     <string name="unit_kilo">kB</string>
+
+    <string name="time_today">Today</string>
+    <string name="time_week">Week</string>
+    <string name="time_month">Month</string>
+    <string name="time_last_month">Last month</string>
+    <string name="time_year">Year</string>
+    <string name="time_custom">Custom</string>
 
     <string name="type_wifi">Wifi</string>
     <string name="type_mobile">Mobile</string>
@@ -24,7 +32,8 @@
     <string name="network_switch_on">Received</string>
     <string name="network_switch_off">Sent</string>
 
-    <string name="app_usage_perc_format">%.2f%%</string>
+    <string name="appusage_total_usage_title">Uso totale</string>
+    <string name="appusage_perc_format">%.2f%%</string>
 
     <string name="transition_app_icon">appIcon</string>
     <string name="transition_app_name">appName</string>

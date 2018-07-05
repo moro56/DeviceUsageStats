@@ -31,6 +31,7 @@ import it.emperor.deviceusagestats.events.AppDetailEvent
 import it.emperor.deviceusagestats.extensions.formatBytes
 import it.emperor.deviceusagestats.extensions.formatBytesWithDecimal
 import it.emperor.deviceusagestats.extensions.px
+import it.emperor.deviceusagestats.models.TimeType
 import it.emperor.deviceusagestats.services.UsageService
 import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.detail.appDetail
@@ -38,7 +39,6 @@ import it.emperor.deviceusagestats.ui.network.formatters.NetworkAxisFormatter
 import it.emperor.deviceusagestats.ui.network.formatters.TimeAxisFormatter
 import it.emperor.deviceusagestats.ui.network.model.NetworkStatsInternal
 import it.emperor.deviceusagestats.ui.network.model.NetworkStatsMaps
-import it.emperor.deviceusagestats.ui.network.model.NetworkStatsMapsTimeType
 import it.emperor.deviceusagestats.ui.views.RoundProgressBar
 import it.emperor.deviceusagestats.ui.views.WheelProgressView
 import it.emperor.deviceusagestats.utils.EasySpan
@@ -54,7 +54,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
     private lateinit var usageService: UsageService
 
     private lateinit var networkUsageMaps: NetworkStatsMaps
-    private lateinit var networkUsageMapsTimeType: NetworkStatsMapsTimeType
+    private lateinit var timeType: TimeType
     private lateinit var start: DateTime
     private lateinit var end: DateTime
     private var showRx: Boolean = true
@@ -63,6 +63,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.setDisplayShowTitleEnabled(true)
+        updateToolbarSubtitleWithFilter(timeType)
     }
 
     override fun getLayoutId(): Int {
@@ -70,6 +71,10 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
     }
 
     override fun initVariables() {
+        networkUsageMaps = NetworkStatsMaps(packageManager)
+        timeType = TimeType.TODAY
+        start = DateTime.now().withTimeAtStartOfDay()
+        end = DateTime.now()
     }
 
     override fun loadParameters(extras: Bundle) {
@@ -96,36 +101,42 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
                     chart_bubble.visibility = View.GONE
                     when (it.itemId) {
                         R.id.today -> {
-                            networkUsageMapsTimeType = NetworkStatsMapsTimeType.HOUR
+                            timeType = TimeType.TODAY
                             start = DateTime.now().withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(networkUsageMapsTimeType)
+                            update(timeType)
+                            updateToolbarSubtitleWithFilter(timeType)
                         }
                         R.id.week -> {
-                            networkUsageMapsTimeType = NetworkStatsMapsTimeType.DAY
+                            timeType = TimeType.WEEK
                             start = DateTime.now().minusDays(7).withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(networkUsageMapsTimeType)
+                            update(timeType)
+                            updateToolbarSubtitleWithFilter(timeType)
                         }
                         R.id.month -> {
-                            networkUsageMapsTimeType = NetworkStatsMapsTimeType.DAY
+                            timeType = TimeType.MONTH
                             start = DateTime.now().minusMonths(1).withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(networkUsageMapsTimeType)
+                            update(timeType)
+                            updateToolbarSubtitleWithFilter(timeType)
                         }
                         R.id.last_month -> {
-                            networkUsageMapsTimeType = NetworkStatsMapsTimeType.DAY
+                            timeType = TimeType.LAST_MONTH
                             start = DateTime.now().minusMonths(2).withTimeAtStartOfDay()
                             end = DateTime.now().minusMonths(1)
-                            update(networkUsageMapsTimeType)
+                            update(timeType)
+                            updateToolbarSubtitleWithFilter(timeType)
                         }
                         R.id.year -> {
-                            networkUsageMapsTimeType = NetworkStatsMapsTimeType.DAY
+                            timeType = TimeType.YEAR
                             start = DateTime.now().minusYears(1).withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(networkUsageMapsTimeType)
+                            update(timeType)
+                            updateToolbarSubtitleWithFilter(timeType)
                         }
                         R.id.custom -> {
+                            timeType = TimeType.CUSTOM
 
                         }
                     }
@@ -139,8 +150,6 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
     }
 
     override fun initialize() {
-        networkUsageMaps = NetworkStatsMaps(packageManager)
-
         network_chart.description.text = ""
         network_chart.isScaleYEnabled = false
         network_chart.legend.textColor = Color.WHITE
@@ -166,15 +175,13 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         val yAxisRight: YAxis = network_chart.axisRight
         yAxisRight.isEnabled = false
 
-        networkUsageMapsTimeType = NetworkStatsMapsTimeType.HOUR
-        start = DateTime.now().withTimeAtStartOfDay()
-        end = DateTime.now()
-        update(networkUsageMapsTimeType)
+        update(timeType)
 
         rx_tx_switch.setOnCheckedChangeListener { _, checked ->
             run {
                 showRx = checked
                 chart_bubble.visibility = View.GONE
+                network_chart.hideHighlight()
                 if (checked) {
                     rx_tx_switch.text = getString(R.string.network_switch_on)
                 } else {
@@ -185,7 +192,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         }
 
         apps_show_all.setOnClickListener {
-            startActivity(networkAppList(networkUsageMapsTimeType, start, end))
+            startActivity(networkAppList(timeType, start, end))
         }
     }
 
@@ -197,14 +204,14 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
 
     // FUNCTIONS
 
-    private fun update(timeType: NetworkStatsMapsTimeType) {
+    private fun update(timeType: TimeType) {
         loading.visibility = View.VISIBLE
         rx_tx_switch.visibility = View.GONE
 
         val xAxis: XAxis = network_chart.xAxis
         xAxis.valueFormatter = null
         network_chart.data = null
-        network_chart.invalidate()
+        network_chart.hideHighlight()
 
         Handler().postDelayed({
             doAsync {
@@ -217,7 +224,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         }, 100)
     }
 
-    private fun loadInfo(timeType: NetworkStatsMapsTimeType) {
+    private fun loadInfo(timeType: TimeType) {
         val wifi = usageService.loadNetworkSummaryForUserStats(UsageService.WIFI, start, end)
         val mobile = usageService.loadNetworkSummaryForUserStats(UsageService.MOBILE, start, end)
 
@@ -310,7 +317,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         val data = LineData(dataSets)
 
         val xAxis: XAxis = network_chart.xAxis
-        xAxis.valueFormatter = TimeAxisFormatter(networkUsageMapsTimeType, networkUsageMaps.rxByTime)
+        xAxis.valueFormatter = TimeAxisFormatter(timeType, networkUsageMaps.rxByTime)
 
         network_chart.data = data
         network_chart.invalidate()
@@ -318,6 +325,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
 
     override fun onNothingSelected() {
         chart_bubble.visibility = View.GONE
+        network_chart.hideHighlight()
     }
 
     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -345,6 +353,9 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
             }
         }
         network_chart.highlightValues(highlight)
+
+        val position = h?.x!!
+        network_chart.highightSpace(position.toInt())
     }
 
     private fun updateBytesValueAndUnit(value: Long?, valueView: TextView, unitView: TextView) {

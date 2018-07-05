@@ -14,20 +14,20 @@ import android.view.MenuItem
 import android.view.View
 import it.emperor.deviceusagestats.R
 import it.emperor.deviceusagestats.events.AppDetailEvent
+import it.emperor.deviceusagestats.models.TimeType
 import it.emperor.deviceusagestats.services.RxBus
 import it.emperor.deviceusagestats.services.UsageService
 import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.detail.appDetail
 import it.emperor.deviceusagestats.ui.network.adapters.NetworkStatsAppsAdapter
 import it.emperor.deviceusagestats.ui.network.model.NetworkStatsMaps
-import it.emperor.deviceusagestats.ui.network.model.NetworkStatsMapsTimeType
 import kotlinx.android.synthetic.main.act_network_app_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.joda.time.DateTime
 import javax.inject.Inject
 
-fun Context.networkAppList(mapsType: NetworkStatsMapsTimeType, start: DateTime, end: DateTime): Intent {
+fun Context.networkAppList(mapsType: TimeType, start: DateTime, end: DateTime): Intent {
     return Intent(this, Act_NetworkAppList::class.java)
             .putExtra(INTENT_NETWORK_MAPS_TYPE, mapsType)
             .putExtra(INTENT_NETWORK_START, start)
@@ -47,7 +47,7 @@ class Act_NetworkAppList : BaseActivity() {
 
     private lateinit var networkUsageMaps: NetworkStatsMaps
 
-    private lateinit var mapsType: NetworkStatsMapsTimeType
+    private lateinit var mapsType: TimeType
     private lateinit var start: DateTime
     private lateinit var end: DateTime
     private var showRx: Boolean = true
@@ -56,6 +56,7 @@ class Act_NetworkAppList : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.setDisplayShowTitleEnabled(true)
+        updateToolbarSubtitleWithFilter(mapsType)
     }
 
     override fun getLayoutId(): Int {
@@ -63,10 +64,11 @@ class Act_NetworkAppList : BaseActivity() {
     }
 
     override fun initVariables() {
+        networkUsageMaps = NetworkStatsMaps(packageManager)
     }
 
     override fun loadParameters(extras: Bundle) {
-        mapsType = extras.getSerializable(INTENT_NETWORK_MAPS_TYPE) as NetworkStatsMapsTimeType
+        mapsType = extras.getSerializable(INTENT_NETWORK_MAPS_TYPE) as TimeType
         start = extras.getSerializable(INTENT_NETWORK_START) as DateTime
         end = extras.getSerializable(INTENT_NETWORK_END) as DateTime
     }
@@ -91,36 +93,42 @@ class Act_NetworkAppList : BaseActivity() {
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.today -> {
-                            mapsType = NetworkStatsMapsTimeType.HOUR
+                            mapsType = TimeType.TODAY
                             start = DateTime.now().withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
+                            updateToolbarSubtitleWithFilter(mapsType)
                         }
                         R.id.week -> {
-                            mapsType = NetworkStatsMapsTimeType.DAY
+                            mapsType = TimeType.WEEK
                             start = DateTime.now().minusDays(7).withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
+                            updateToolbarSubtitleWithFilter(mapsType)
                         }
                         R.id.month -> {
-                            mapsType = NetworkStatsMapsTimeType.DAY
+                            mapsType = TimeType.MONTH
                             start = DateTime.now().minusMonths(1).withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
+                            updateToolbarSubtitleWithFilter(mapsType)
                         }
                         R.id.last_month -> {
-                            mapsType = NetworkStatsMapsTimeType.DAY
+                            mapsType = TimeType.LAST_MONTH
                             start = DateTime.now().minusMonths(2).withTimeAtStartOfDay()
                             end = DateTime.now().minusMonths(1)
                             update()
+                            updateToolbarSubtitleWithFilter(mapsType)
                         }
                         R.id.year -> {
-                            mapsType = NetworkStatsMapsTimeType.DAY
+                            mapsType = TimeType.YEAR
                             start = DateTime.now().minusYears(1).withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
+                            updateToolbarSubtitleWithFilter(mapsType)
                         }
                         R.id.custom -> {
+                            mapsType = TimeType.CUSTOM
 
                         }
                     }
@@ -134,8 +142,6 @@ class Act_NetworkAppList : BaseActivity() {
     }
 
     override fun initialize() {
-        networkUsageMaps = NetworkStatsMaps(packageManager)
-
         list.layoutManager = LinearLayoutManager(this)
         list.adapter = NetworkStatsAppsAdapter(this, mutableListOf(), 0, showRx)
 
