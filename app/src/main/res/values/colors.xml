@@ -5,8 +5,9 @@
     <color name="colorAccent">@color/system_primary</color>
 
     <color name="system_primary">#f69314</color>
-    <color name="system_secondary">#2076c6</color>
-    <color name="system_tertiary">#ffff00</color>
+    <color name="system_secondary">#c62076</color>
+    <color name="system_tertiary">#2076c6</color>
+    <color name="system_quaternary">#20c670</color>
 
     <color name="system_background_light">#33353d</color>
     <color name="system_background">#27292f</color>

@@ -7,4 +7,10 @@
         <attr name="rpb_radius" format="dimension" />
         <attr name="rpb_padding" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="WheelProgressView">
+        <attr name="wpv_progress_color" format="color" />
+        <attr name="wpv_progress_background_color" format="color" />
+        <attr name="wpv_background_color" format="color" />
+    </declare-styleable>
 </resources>

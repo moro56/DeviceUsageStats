@@ -1,642 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     tools:context=".ui.network.Act_Network">
 
     <View
         android:id="@+id/placeholder"
         android:layout_width="1dp"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_gravity="end" />
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/network_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Network Stats"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize">
 
-    <TextView
-        android:id="@+id/network_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/network_title" />
-
-    <LinearLayout
-        android:id="@+id/summary_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/network_title">
-
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:paddingTop="8dp">
 
             <TextView
-                android:id="@+id/rx_bytes_title"
-                style="@style/FontLight"
+                android:id="@+id/bytes_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/rx_bytes_layout"
-                android:layout_marginStart="16dp"
-                android:text="Dati ricevuti"
-                android:textColor="@color/text_white_label" />
-
-            <LinearLayout
-                android:id="@+id/rx_bytes_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rx_bytes_title"
-                android:layout_centerHorizontal="true">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="2dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_file_download_white_24dp"
-                    android:tint="@color/color_green" />
-
-                <TextView
-                    android:id="@+id/rx_bytes_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/network_default_value"
-                    android:textColor="@color/system_primary"
-                    android:textSize="35sp" />
-
-                <TextView
-                    android:id="@+id/rx_bytes_unit"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/network_unit_kilo"
-                    android:textColor="@color/text_white_primary"
-                    android:textSize="18sp" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tx_bytes_title"
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/tx_bytes_layout"
-                android:layout_marginStart="16dp"
-                android:text="Dati inviati"
-                android:textColor="@color/text_white_label" />
-
-            <LinearLayout
-                android:id="@+id/tx_bytes_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tx_bytes_title"
-                android:layout_centerHorizontal="true">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="2dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_file_upload_white_24dp"
-                    android:tint="@color/color_red" />
-
-                <TextView
-                    android:id="@+id/tx_bytes_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/network_default_value"
-                    android:textColor="@color/system_primary"
-                    android:textSize="35sp" />
-
-                <TextView
-                    android:id="@+id/tx_bytes_unit"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/network_unit_kilo"
-                    android:textColor="@color/text_white_primary"
-                    android:textSize="18sp" />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/summary_detail_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/summary_layout">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/rx_bytes_wifi_title"
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_wifi_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Wifi"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:includeFontPadding="false"
+                android:text="@string/network_rx_bytes_title"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textColor="@color/text_white_label"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:id="@+id/rx_bytes_wifi_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:minWidth="50dp">
-
-                <TextView
-                    android:id="@+id/rx_bytes_wifi_value"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/network_default_value"
-                    android:textColor="@color/system_primary"
-                    android:textSize="19sp" />
-
-                <TextView
-                    android:id="@+id/rx_bytes_wifi_unit"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/network_unit_kilo"
-                    android:textColor="@color/text_white_primary"
-                    android:textSize="11sp"
-                    tools:ignore="SmallSp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="10dp"
-            android:layout_height="10dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/rx_bytes_mobile_title"
-                style="@style/FontLight"
+                android:id="@+id/bytes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_sim_card_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Mobile"
+                android:layout_marginStart="32dp"
+                android:includeFontPadding="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display3"
+                android:textColor="@color/text_white_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bytes_title" />
+
+            <TextView
+                android:id="@+id/bytes_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:includeFontPadding="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/system_primary"
+                app:layout_constraintBottom_toBottomOf="@+id/bytes"
+                app:layout_constraintStart_toEndOf="@+id/bytes" />
+
+            <TextView
+                android:id="@+id/packets_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                android:text="@string/network_rx_packets_title"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textColor="@color/text_white_label"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:id="@+id/rx_bytes_mobile_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:minWidth="50dp">
-
-                <TextView
-                    android:id="@+id/rx_bytes_mobile_value"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/network_default_value"
-                    android:textColor="@color/system_primary"
-                    android:textSize="19sp" />
-
-                <TextView
-                    android:id="@+id/rx_bytes_mobile_unit"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/network_unit_kilo"
-                    android:textColor="@color/text_white_primary"
-                    android:textSize="11sp"
-                    tools:ignore="SmallSp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bytes" />
 
             <TextView
-                android:id="@+id/tx_bytes_wifi_title"
+                android:id="@+id/packets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:includeFontPadding="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
+                android:textColor="@color/text_white_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/packets_title" />
+
+            <TextView
+                android:id="@+id/packets_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="8dp"
+                android:includeFontPadding="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/system_primary"
+                app:layout_constraintBottom_toBottomOf="@+id/packets"
+                app:layout_constraintStart_toEndOf="@+id/packets" />
+
+            <FrameLayout
+                android:id="@+id/progress_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/system_background_dark"
+                app:layout_constraintBottom_toTopOf="@+id/network_chart"
+                app:layout_constraintTop_toBottomOf="@+id/packets" />
+
+            <it.emperor.deviceusagestats.ui.views.WheelProgressView
+                android:id="@+id/progress_wifi"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="56dp"
+                app:layout_constraintEnd_toStartOf="@+id/progress_mobile"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/packets"
+                app:wpv_progress_background_color="@color/system_background_light"
+                app:wpv_progress_color="@color/system_secondary" />
+
+            <it.emperor.deviceusagestats.ui.views.WheelProgressView
+                android:id="@+id/progress_mobile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="56dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/progress_background"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/progress_wifi"
+                app:layout_constraintTop_toBottomOf="@+id/packets"
+                app:wpv_progress_background_color="@color/system_background_light"
+                app:wpv_progress_color="@color/system_tertiary" />
+
+            <it.emperor.deviceusagestats.ui.views.WheelProgressView
+                android:id="@+id/progress_background"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="52dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/progress_mobile"
+                app:layout_constraintTop_toBottomOf="@+id/packets"
+                app:wpv_progress_background_color="@color/system_background_light"
+                app:wpv_progress_color="@color/system_primary" />
+
+            <it.emperor.deviceusagestats.ui.views.WheelProgressView
+                android:id="@+id/progress_foreground"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/progress_mobile"
+                app:layout_constraintTop_toBottomOf="@+id/progress_background"
+                app:wpv_progress_background_color="@color/system_background_light"
+                app:wpv_progress_color="@color/system_primary" />
+
+            <TextView
+                android:id="@+id/progress_wifi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="0.9"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_white_primary"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="@+id/progress_wifi"
+                app:layout_constraintEnd_toEndOf="@+id/progress_wifi"
+                app:layout_constraintStart_toStartOf="@+id/progress_wifi"
+                app:layout_constraintTop_toTopOf="@+id/progress_wifi" />
+
+            <TextView
+                android:id="@+id/progress_mobile_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="0.9"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_white_primary"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="@+id/progress_mobile"
+                app:layout_constraintEnd_toEndOf="@+id/progress_mobile"
+                app:layout_constraintStart_toStartOf="@+id/progress_mobile"
+                app:layout_constraintTop_toTopOf="@+id/progress_mobile" />
+
+            <TextView
+                android:id="@+id/progress_background_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="0.9"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_white_primary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/progress_background"
+                app:layout_constraintEnd_toEndOf="@+id/progress_background"
+                app:layout_constraintStart_toStartOf="@+id/progress_background"
+                app:layout_constraintTop_toTopOf="@+id/progress_background" />
+
+            <TextView
+                android:id="@+id/progress_foreground_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="0.9"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_white_primary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/progress_foreground"
+                app:layout_constraintEnd_toEndOf="@+id/progress_foreground"
+                app:layout_constraintStart_toStartOf="@+id/progress_foreground"
+                app:layout_constraintTop_toTopOf="@+id/progress_foreground" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/network_chart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="48dp"
+                app:layout_constraintTop_toBottomOf="@+id/progress_wifi" />
+
+            <TextView
+                android:id="@+id/chart_bubble"
                 style="@style/FontLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_wifi_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Wifi"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/bubble"
+                android:gravity="center_horizontal"
+                android:lineSpacingMultiplier="0.9"
+                android:textColor="@color/text_white_primary"
+                android:textSize="11sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progress_wifi"
+                tools:ignore="SmallSp" />
+
+            <TextView
+                android:id="@+id/apps_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@color/system_background_dark"
+                android:paddingBottom="8dp"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="8dp"
+                android:text="Most used apps"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_white_primary"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/network_chart" />
+
+            <LinearLayout
+                android:id="@+id/apps_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/system_background_dark"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/apps_title" />
+
+            <TextView
+                android:id="@+id/apps_show_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/system_background_dark"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:text="Show all"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                 android:textColor="@color/text_white_label"
-                android:textSize="12sp" />
+                app:layout_constraintTop_toBottomOf="@+id/apps_layout" />
 
-            <LinearLayout
-                android:id="@+id/tx_bytes_wifi_layout"
-                android:layout_width="wrap_content"
+            <Switch
+                android:id="@+id/rx_tx_switch"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:minWidth="50dp">
-
-                <TextView
-                    android:id="@+id/tx_bytes_wifi_value"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/network_default_value"
-                    android:textColor="@color/system_primary"
-                    android:textSize="19sp" />
-
-                <TextView
-                    android:id="@+id/tx_bytes_wifi_unit"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/network_unit_kilo"
-                    android:textColor="@color/text_white_primary"
-                    android:textSize="11sp"
-                    tools:ignore="SmallSp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="10dp"
-            android:layout_height="10dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tx_bytes_mobile_title"
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_sim_card_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Mobile"
-                android:textColor="@color/text_white_label"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:id="@+id/tx_bytes_mobile_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:minWidth="50dp">
-
-                <TextView
-                    android:id="@+id/tx_bytes_mobile_value"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/network_default_value"
-                    android:textColor="@color/system_primary"
-                    android:textSize="19sp" />
-
-                <TextView
-                    android:id="@+id/tx_bytes_mobile_unit"
-                    style="@style/FontLight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/network_unit_kilo"
-                    android:textColor="@color/text_white_primary"
-                    android:textSize="11sp"
-                    tools:ignore="SmallSp" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/more_info_layout"
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
-        android:background="@color/system_background_dark"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-4dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_wifi_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Ricevuti"
-                android:textColor="@color/text_white_label" />
-
-            <TextView
-                android:id="@+id/rx_packets_wifi"
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/network_default_value"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="10dp"
+                android:checked="true"
+                android:gravity="end|center_vertical"
+                android:text="@string/network_switch_on"
                 android:textColor="@color/text_white_primary"
-                android:textSize="15sp" />
-        </LinearLayout>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="17dp"
-            android:alpha="0.5"
-            android:background="@color/text_white_label_divider" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-4dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_wifi_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Inviati"
-                android:textColor="@color/text_white_label" />
-
-            <TextView
-                android:id="@+id/tx_packets_wifi"
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/network_default_value"
-                android:textColor="@color/text_white_primary"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-4dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_sim_card_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Ricevuti"
-                android:textColor="@color/text_white_label" />
-
-            <TextView
-                android:id="@+id/rx_packets_mobile"
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/network_default_value"
-                android:textColor="@color/text_white_primary"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="17dp"
-            android:alpha="0.5"
-            android:background="@color/text_white_label_divider" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-4dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableEnd="@drawable/ic_sim_card_white_label_10dp"
-                android:drawablePadding="4dp"
-                android:text="Inviati"
-                android:textColor="@color/text_white_label" />
-
-            <TextView
-                android:id="@+id/tx_packets_mobile"
-                style="@style/FontLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/network_default_value"
-                android:textColor="@color/text_white_primary"
-                android:textSize="15sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/more_info_title"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="3dp"
-        android:alpha="0.5"
-        android:gravity="center_horizontal"
-        android:text="Pacchetti"
-        android:textColor="@color/text_white_label"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="25dp"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:background="@drawable/toolbar_gradient" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/network_chart"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/more_info_layout"
-        app:layout_constraintTop_toBottomOf="@+id/summary_detail_layout" />
-
-    <TextView
-        android:id="@+id/max_y"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10Mb"
-        android:textColor="@color/text_white_primary"
-        android:textSize="11sp"
-        app:layout_constraintTop_toTopOf="@+id/network_chart" />
-
-    <TextView
-        android:id="@+id/middle_y"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="10Mb"
-        android:textColor="@color/text_white_primary"
-        android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@+id/network_chart"
-        app:layout_constraintTop_toTopOf="@+id/network_chart" />
-
-    <Switch
-        android:id="@+id/rx_tx_switch"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="16dp"
-        android:checked="true"
-        android:gravity="end|center_vertical"
-        android:text="Ricevuti"
-        android:textColor="@color/text_white_primary"
-        app:layout_constraintBottom_toTopOf="@+id/more_info_title"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/chart_bubble"
-        style="@style/FontLight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bubble"
-        android:gravity="center_horizontal"
-        android:lineSpacingMultiplier="0.9"
-        android:textColor="@color/text_white_primary"
-        android:textSize="11sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/summary_detail_layout"
-        tools:ignore="SmallSp" />
-
-    <ImageView
-        android:id="@+id/showmore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_keyboard_arrow_down_white_48x24dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/list_title_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:paddingBottom="8dp"
-        android:paddingEnd="24dp"
-        android:paddingStart="24dp"
-        android:paddingTop="8dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/summary_detail_layout">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Application network usage"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:textColor="@color/text_white_primary"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/showless"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_keyboard_arrow_down_white_48x24dp"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </FrameLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/system_background_dark"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/summary_detail_layout" />
-</android.support.constraint.ConstraintLayout>
+    <include
+        android:id="@+id/loading"
+        layout="@layout/system_loading"
+        android:visibility="gone" />
+</FrameLayout>

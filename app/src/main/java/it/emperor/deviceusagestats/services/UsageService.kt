@@ -29,9 +29,15 @@ class UsageService {
     }
 
     @SuppressLint("MissingPermission", "HardwareIds")
-    fun loadNetworkSummaryStats(type: Int, start: DateTime, end: DateTime): NetworkStats.Bucket? {
+    fun loadNetworkSummaryForUserStats(type: Int, start: DateTime, end: DateTime): NetworkStats.Bucket? {
         val subscriberId = telephonyManager.subscriberId ?: ""
         return networkStatsManager.querySummaryForUser(type, subscriberId, start.toDate().time, end.toDate().time)
+    }
+
+    @SuppressLint("MissingPermission", "HardwareIds")
+    fun loadNetworkSummaryStats(type: Int, start: DateTime, end: DateTime): NetworkStats? {
+        val subscriberId = telephonyManager.subscriberId ?: ""
+        return networkStatsManager.querySummary(type, subscriberId, start.toDate().time, end.toDate().time)
     }
 
     @SuppressLint("MissingPermission", "HardwareIds")

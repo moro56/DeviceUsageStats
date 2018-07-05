@@ -29,7 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.network.Act_Network" />
+        <activity
+            android:name=".ui.network.Act_Network"
+            android:label="@string/app_network" />
+        <activity
+            android:name=".ui.network.Act_NetworkAppList"
+            android:label="@string/app_network" />
         <activity android:name=".ui.usage.Act_AppUsage" />
         <activity android:name=".ui.detail.Act_AppDetail" />
     </application>
