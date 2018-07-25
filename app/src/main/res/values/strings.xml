@@ -42,6 +42,8 @@
     <string name="appusage_most_used_app">Most used apps</string>
     <string name="appusage_most_used_app_show_all">Show all</string>
 
+    <string name="search_view_hint">Search…</string>
+
     <string name="transition_app_icon">appIcon</string>
     <string name="transition_app_name">appName</string>
 </resources>

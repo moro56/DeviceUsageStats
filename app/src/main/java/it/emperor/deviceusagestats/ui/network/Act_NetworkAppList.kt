@@ -21,6 +21,7 @@ import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.detail.appDetail
 import it.emperor.deviceusagestats.ui.network.adapters.NetworkStatsAppsAdapter
 import it.emperor.deviceusagestats.ui.network.model.NetworkStatsMaps
+import it.emperor.deviceusagestats.ui.views.SearchView
 import kotlinx.android.synthetic.main.act_network_app_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -38,7 +39,7 @@ private const val INTENT_NETWORK_MAPS_TYPE = "mapsType"
 private const val INTENT_NETWORK_START = "start"
 private const val INTENT_NETWORK_END = "end"
 
-class Act_NetworkAppList : BaseActivity() {
+class Act_NetworkAppList : BaseActivity(), SearchView.OnTextChangeListener {
 
     @Inject
     private lateinit var usageService: UsageService
@@ -50,7 +51,9 @@ class Act_NetworkAppList : BaseActivity() {
     private lateinit var mapsType: NetworkTimeType
     private lateinit var start: DateTime
     private lateinit var end: DateTime
+
     private var showRx: Boolean = true
+    private var searchText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,6 +155,17 @@ class Act_NetworkAppList : BaseActivity() {
                 is AppDetailEvent -> onEvent(it)
             }
         }, {})
+
+        search_view.listener = this
+    }
+
+    override fun onTextChange(text: String) {
+        if (text.isEmpty()) {
+            searchText = null
+        } else {
+            searchText = text
+        }
+        updateViews()
     }
 
     private fun onEvent(event: AppDetailEvent) {
@@ -186,6 +200,9 @@ class Act_NetworkAppList : BaseActivity() {
         loading.visibility = View.GONE
 
         var appList = if (showRx) networkUsageMaps.all.rxByApp.toList() else networkUsageMaps.all.txByApp.toList()
+        if (searchText != null) {
+            appList = appList.filter { it.second.name.contains(searchText!!) || it.second.packageName.contains(searchText!!) }
+        }
         appList = appList.sortedByDescending { it.second.valueDownload + it.second.valueUpload }
 
         (list.adapter as NetworkStatsAppsAdapter).swapItems(appList, if (showRx) networkUsageMaps.all.rxByAppTotal else networkUsageMaps.all.txByAppTotal, showRx)

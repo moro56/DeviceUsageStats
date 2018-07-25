@@ -21,7 +21,8 @@ import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.detail.appDetail
 import it.emperor.deviceusagestats.ui.usage.adapters.AppUsageStatsAdapter
 import it.emperor.deviceusagestats.ui.usage.model.AppUsageStatsMaps
-import kotlinx.android.synthetic.main.act_network_app_list.*
+import it.emperor.deviceusagestats.ui.views.SearchView
+import kotlinx.android.synthetic.main.act_appusage_app_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.joda.time.DateTime
@@ -38,7 +39,7 @@ private const val INTENT_USAGE_MAPS_TYPE = "mapsType"
 private const val INTENT_USAGE_START = "start"
 private const val INTENT_USAGE_END = "end"
 
-class Act_AppUsageAppList : BaseActivity() {
+class Act_AppUsageAppList : BaseActivity(), SearchView.OnTextChangeListener {
 
     @Inject
     private lateinit var usageService: UsageService
@@ -50,6 +51,8 @@ class Act_AppUsageAppList : BaseActivity() {
     private lateinit var mapsType: AppTimeType
     private lateinit var start: DateTime
     private lateinit var end: DateTime
+
+    private var searchText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,10 +91,10 @@ class Act_AppUsageAppList : BaseActivity() {
         when (item?.itemId) {
             R.id.filter -> {
                 val popupMenu = PopupMenu(this, placeholder, Gravity.BOTTOM)
-                popupMenu.inflate(R.menu.act_network_filter)
+                popupMenu.inflate(R.menu.act_appusage_filter)
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.today -> {
+                        R.id.day -> {
                             mapsType = AppTimeType.DAY
                             start = DateTime.now().withTimeAtStartOfDay()
                             end = DateTime.now()
@@ -112,7 +115,7 @@ class Act_AppUsageAppList : BaseActivity() {
                             update()
                             updateToolbarSubtitleWithAppFilter(mapsType)
                         }
-                        R.id.last_month -> {
+                        R.id.year -> {
                             mapsType = AppTimeType.YEAR
                             start = DateTime.now().minusYears(1).withTimeAtStartOfDay()
                             end = DateTime.now()
@@ -140,6 +143,17 @@ class Act_AppUsageAppList : BaseActivity() {
                 is AppDetailEvent -> onEvent(it)
             }
         }, {})
+
+        search_view.listener = this
+    }
+
+    override fun onTextChange(text: String) {
+        if (text.isEmpty()) {
+            searchText = null
+        } else {
+            searchText = text
+        }
+        updateViews()
     }
 
     private fun onEvent(event: AppDetailEvent) {
@@ -176,6 +190,9 @@ class Act_AppUsageAppList : BaseActivity() {
         loading.visibility = View.GONE
 
         var appList = appUsageStatsMaps.totalUsage.toList()
+        if (searchText != null) {
+            appList = appList.filter { it.second.name.contains(searchText!!) || it.second.packageName.contains(searchText!!) }
+        }
         appList = appList.sortedByDescending { it.second.timeInForeground }
 
         (list.adapter as AppUsageStatsAdapter).swapItems(appList, appUsageStatsMaps.totalForeground)

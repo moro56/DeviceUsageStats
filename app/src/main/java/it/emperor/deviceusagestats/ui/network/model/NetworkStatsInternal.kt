@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable
 import it.emperor.deviceusagestats.App
 import it.emperor.deviceusagestats.R
 
-data class NetworkStatsInternal(var uid: Int, var name: String?, var packageName: String?, var icon: Drawable?, var valueDownload: Long, var valueUpload: Long) {
-    constructor() : this(0, null, null, null, 0, 0)
+data class NetworkStatsInternal(var uid: Int, var name: String, var packageName: String, var icon: Drawable?, var valueDownload: Long, var valueUpload: Long) {
+    constructor() : this(0, "", "", null, 0, 0)
 
     fun formatValue(value: Long?): String {
         val tera: Double = value?.div(Math.pow(2.0, 40.0)) ?: 0.0
