@@ -2,7 +2,7 @@ package it.emperor.deviceusagestats.ui.network.model
 
 import android.app.usage.NetworkStats
 import android.content.pm.PackageManager
-import it.emperor.deviceusagestats.models.TimeType
+import it.emperor.deviceusagestats.models.NetworkTimeType
 
 enum class NetworkStatsMapsType {
     WIFI_TIME_RX, WIFI_TIME_TX, WIFI_APP, MOBILE_TIME_RX, MOBILE_TIME_TX, MOBILE_APP
@@ -27,7 +27,7 @@ data class NetworkStatsMaps(val packageManager: PackageManager) {
     internal var txForegroundTotal: Long = 0
     internal var maxValue: Long = 0
 
-    fun update(wifiTotal: NetworkStats.Bucket?, mobileTotal: NetworkStats.Bucket?, timeType: TimeType, wifiDetails: NetworkStats?, mobileDetails: NetworkStats?, wifiSummary: NetworkStats?, mobileSummary: NetworkStats?) {
+    fun update(wifiTotal: NetworkStats.Bucket?, mobileTotal: NetworkStats.Bucket?, timeType: NetworkTimeType, wifiDetails: NetworkStats?, mobileDetails: NetworkStats?, wifiSummary: NetworkStats?, mobileSummary: NetworkStats?) {
         all.clear()
         wifi.clear()
         mobile.clear()
@@ -121,14 +121,14 @@ data class NetworkStatsMaps(val packageManager: PackageManager) {
         }
     }
 
-    private fun getTimeDividet(timeType: TimeType): Long {
+    private fun getTimeDividet(timeType: NetworkTimeType): Long {
         return when (timeType) {
-            TimeType.TODAY -> 1000
-            TimeType.WEEK -> 86400000
-            TimeType.MONTH -> 86400000
-            TimeType.LAST_MONTH -> 86400000
-            TimeType.YEAR -> 2592000000
-            TimeType.CUSTOM -> 86400000
+            NetworkTimeType.TODAY -> 1000
+            NetworkTimeType.WEEK -> 86400000
+            NetworkTimeType.MONTH -> 86400000
+            NetworkTimeType.LAST_MONTH -> 86400000
+            NetworkTimeType.YEAR -> 2592000000
+            NetworkTimeType.CUSTOM -> 86400000
         }
     }
 

@@ -14,24 +14,22 @@ import it.emperor.deviceusagestats.events.AppDetailEvent
 import it.emperor.deviceusagestats.extensions.toTimeString
 import it.emperor.deviceusagestats.services.RxBus
 import it.emperor.deviceusagestats.ui.usage.model.AppUsageStats
-import it.emperor.deviceusagestats.ui.usage.model.AppUsageStatsMaps
 import it.emperor.deviceusagestats.ui.views.RoundProgressBar
 import javax.inject.Inject
 
-class AppUsageStatsAdapter(val context: Context, val appUsageStats: AppUsageStatsMaps) : RecyclerView.Adapter<AppUsageStatsAdapter.ViewHolder>() {
+class AppUsageStatsAdapter(val context: Context, var items: List<Pair<String, AppUsageStats>>, var total: Long) : RecyclerView.Adapter<AppUsageStatsAdapter.ViewHolder>() {
 
     @Inject
     private lateinit var rxBus: RxBus
+
+    private var loading = false
 
     init {
         App.feather.injectFields(this)
     }
 
-    private var showInForeground = true
-    private var showLoading = false
-
     override fun getItemCount(): Int {
-        return if (showLoading) 0 else getCorrectSize()
+        return if (loading) 0 else items.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,57 +37,46 @@ class AppUsageStatsAdapter(val context: Context, val appUsageStats: AppUsageStat
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val appUsage = getCorrectItem(position)
-        val perc: Float = if (showInForeground) appUsage.timeInForeground.toFloat() / getCorrectTotal().toFloat() else appUsage.usedTime.toFloat() / getCorrectTotal().toFloat()
+        val networkUsage = items.get(position)
+        val value = networkUsage.second.timeInForeground.toFloat()
+        val perc: Float = value / total.toFloat()
 
-        holder.name.text = appUsage.name
-        holder.time.text = if (showInForeground) appUsage.timeInForeground.toTimeString() else appUsage.usedTime.toTimeString()
-
-        appUsage.icon?.let { Glide.with(context).load(appUsage.icon).into(holder.icon) }
-                ?: kotlin.run { Glide.with(context).clear(holder.icon) }
-
+        holder.name.text = networkUsage.second.name
+        holder.packageName.text = networkUsage.second.packageName
         holder.progress.setProgress(perc)
-        holder.progressPerc.text = context.getString(R.string.appusage_perc_format).format(perc * 100f)
+        holder.progressPerc.text = value.toLong().toTimeString(true)
+
+        networkUsage.second.icon?.let { Glide.with(context).load(networkUsage.second.icon).into(holder.icon) }
+                ?: kotlin.run { Glide.with(context).load(R.drawable.default_app).into(holder.icon) }
 
         holder.row.setOnClickListener {
-            rxBus.send(AppDetailEvent(appUsage.packageName, holder.icon, holder.name))
+            rxBus.send(AppDetailEvent(networkUsage.second.packageName.toString(), holder.icon, holder.name))
         }
     }
 
-    fun setShowInForeground(showInForeground: Boolean) {
-        this.showInForeground = showInForeground
-        notifyDataSetChanged()
-    }
-
-    fun setShowLoading(showLoading: Boolean) {
-        if (showLoading) {
+    fun setIsLoading(loading: Boolean) {
+        if (loading) {
             notifyItemRangeRemoved(0, itemCount)
-            this.showLoading = showLoading
+            this.loading = loading
         } else {
-            this.showLoading = showLoading
+            this.loading = loading
             notifyItemRangeInserted(0, itemCount)
         }
     }
 
-    private fun getCorrectSize(): Int {
-        return if (showInForeground) appUsageStats.foregroundUsage.size else appUsageStats.totalUsageList.size
-    }
-
-    private fun getCorrectItem(position: Int): AppUsageStats {
-        return if (showInForeground) appUsageStats.foregroundUsage.get(position) else appUsageStats.totalUsageList.get(position)
-    }
-
-    private fun getCorrectTotal(): Long {
-        return if (showInForeground) appUsageStats.foregroundUsageTotal else appUsageStats.totalUsageTotal
+    fun swapItems(items: List<Pair<String, AppUsageStats>>, total: Long) {
+        this.items = items
+        this.total = total
+        notifyDataSetChanged()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val row = view.findViewById<View>(R.id.row)
+        val row: View = view.findViewById<View>(R.id.row)
 
-        val icon = view.findViewById<ImageView>(R.id.icon)
-        val name = view.findViewById<TextView>(R.id.name)
-        val time = view.findViewById<TextView>(R.id.time)
-        val progress = view.findViewById<RoundProgressBar>(R.id.progress)
-        val progressPerc = view.findViewById<TextView>(R.id.progress_perc)
+        val icon: ImageView = view.findViewById(R.id.icon)
+        val name: TextView = view.findViewById(R.id.name)
+        val packageName: TextView = view.findViewById(R.id.package_name)
+        val progress: RoundProgressBar = view.findViewById(R.id.progress)
+        val progressPerc: TextView = view.findViewById(R.id.progress_perc)
     }
 }

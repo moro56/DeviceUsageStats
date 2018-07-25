@@ -1,10 +1,12 @@
 package it.emperor.deviceusagestats.ui.base
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import it.emperor.deviceusagestats.App
 import it.emperor.deviceusagestats.R
-import it.emperor.deviceusagestats.models.TimeType
+import it.emperor.deviceusagestats.models.AppTimeType
+import it.emperor.deviceusagestats.models.NetworkTimeType
 import kotlinx.android.synthetic.main.toolbar.*
 import net.danlew.android.joda.JodaTimeAndroid
 
@@ -13,6 +15,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         JodaTimeAndroid.init(this)
         App.feather.injectFields(this)
 
@@ -58,14 +61,23 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    protected fun updateToolbarSubtitleWithFilter(timeType: TimeType) {
+    protected fun updateToolbarSubtitleWithNetworkFilter(timeType: NetworkTimeType) {
         when (timeType) {
-            TimeType.TODAY -> supportActionBar?.subtitle = getString(R.string.time_today)
-            TimeType.WEEK -> supportActionBar?.subtitle = getString(R.string.time_week)
-            TimeType.MONTH -> supportActionBar?.subtitle = getString(R.string.time_month)
-            TimeType.LAST_MONTH -> supportActionBar?.subtitle = getString(R.string.time_last_month)
-            TimeType.YEAR -> supportActionBar?.subtitle = getString(R.string.time_year)
-            TimeType.CUSTOM -> supportActionBar?.subtitle = getString(R.string.time_today)
+            NetworkTimeType.TODAY -> supportActionBar?.subtitle = getString(R.string.time_today)
+            NetworkTimeType.WEEK -> supportActionBar?.subtitle = getString(R.string.time_week)
+            NetworkTimeType.MONTH -> supportActionBar?.subtitle = getString(R.string.time_month)
+            NetworkTimeType.LAST_MONTH -> supportActionBar?.subtitle = getString(R.string.time_last_month)
+            NetworkTimeType.YEAR -> supportActionBar?.subtitle = getString(R.string.time_year)
+            NetworkTimeType.CUSTOM -> supportActionBar?.subtitle = getString(R.string.time_today)
+        }
+    }
+
+    protected fun updateToolbarSubtitleWithAppFilter(timeType: AppTimeType) {
+        when (timeType) {
+            AppTimeType.DAY -> supportActionBar?.subtitle = getString(R.string.time_day)
+            AppTimeType.WEEK -> supportActionBar?.subtitle = getString(R.string.time_week)
+            AppTimeType.MONTH -> supportActionBar?.subtitle = getString(R.string.time_month)
+            AppTimeType.YEAR -> supportActionBar?.subtitle = getString(R.string.time_year)
         }
     }
 }

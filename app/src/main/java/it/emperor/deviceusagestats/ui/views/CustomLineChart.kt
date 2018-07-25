@@ -3,7 +3,6 @@ package it.emperor.deviceusagestats.ui.views
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import com.github.mikephil.charting.charts.LineChart
 import it.emperor.deviceusagestats.R
@@ -23,7 +22,7 @@ class CustomLineChart : LineChart {
 
     init {
         paint.isAntiAlias = true
-        paint.color = ContextCompat.getColor(context, R.color.system_background_dark)
+        paint.color = context.getColor(R.color.system_background_dark)
         paint.style = Paint.Style.FILL
         paint.alpha = 175
     }

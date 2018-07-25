@@ -35,9 +35,11 @@
         <activity
             android:name=".ui.network.Act_NetworkAppList"
             android:label="@string/app_network" />
-        <activity android:name=".ui.usage.Act_AppUsage" />
-        <activity android:name=".ui.usage.Act_AppUsage2"
+        <activity android:name=".ui.usage.Act_AppUsage"
             android:label="@string/app_appusage"  />
+        <activity
+            android:name=".ui.usage.Act_AppUsageAppList"
+            android:label="@string/app_appusage" />
         <activity android:name=".ui.detail.Act_AppDetail" />
     </application>
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/today"
+        android:id="@+id/day"
         android:icon="@drawable/ic_tune_white_24dp"
-        android:title="@string/time_today" />
+        android:title="@string/time_day" />
     <item
         android:id="@+id/week"
         android:icon="@drawable/ic_tune_white_24dp"
@@ -13,15 +13,7 @@
         android:icon="@drawable/ic_tune_white_24dp"
         android:title="@string/time_month" />
     <item
-        android:id="@+id/last_month"
-        android:icon="@drawable/ic_tune_white_24dp"
-        android:title="@string/time_last_month" />
-    <item
         android:id="@+id/year"
         android:icon="@drawable/ic_tune_white_24dp"
         android:title="@string/time_year" />
-    <item
-        android:id="@+id/custom"
-        android:icon="@drawable/ic_tune_white_24dp"
-        android:title="@string/time_custom" />
 </menu>

@@ -22,7 +22,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +37,7 @@
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/time"
+            android:id="@+id/package_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/text_white_label"
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="6dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="48dp"
+                android:layout_marginEnd="54dp"
                 app:rpb_background_color="@color/system_background_light"
                 app:rpb_progress="0.5"
                 app:rpb_progress_color="@color/system_primary" />
@@ -62,7 +62,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:text="50%"
                 android:textColor="@color/text_white_primary" />
         </FrameLayout>
 

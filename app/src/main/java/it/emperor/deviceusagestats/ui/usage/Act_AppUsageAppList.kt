@@ -1,4 +1,4 @@
-package it.emperor.deviceusagestats.ui.network
+package it.emperor.deviceusagestats.ui.usage
 
 import android.app.ActivityOptions
 import android.content.Context
@@ -14,63 +14,62 @@ import android.view.MenuItem
 import android.view.View
 import it.emperor.deviceusagestats.R
 import it.emperor.deviceusagestats.events.AppDetailEvent
-import it.emperor.deviceusagestats.models.NetworkTimeType
+import it.emperor.deviceusagestats.models.AppTimeType
 import it.emperor.deviceusagestats.services.RxBus
 import it.emperor.deviceusagestats.services.UsageService
 import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.detail.appDetail
-import it.emperor.deviceusagestats.ui.network.adapters.NetworkStatsAppsAdapter
-import it.emperor.deviceusagestats.ui.network.model.NetworkStatsMaps
+import it.emperor.deviceusagestats.ui.usage.adapters.AppUsageStatsAdapter
+import it.emperor.deviceusagestats.ui.usage.model.AppUsageStatsMaps
 import kotlinx.android.synthetic.main.act_network_app_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.joda.time.DateTime
 import javax.inject.Inject
 
-fun Context.networkAppList(mapsType: NetworkTimeType, start: DateTime, end: DateTime): Intent {
-    return Intent(this, Act_NetworkAppList::class.java)
-            .putExtra(INTENT_NETWORK_MAPS_TYPE, mapsType)
-            .putExtra(INTENT_NETWORK_START, start)
-            .putExtra(INTENT_NETWORK_END, end)
+fun Context.appusageAppList(mapsType: AppTimeType, start: DateTime, end: DateTime): Intent {
+    return Intent(this, Act_AppUsageAppList::class.java)
+            .putExtra(INTENT_USAGE_MAPS_TYPE, mapsType)
+            .putExtra(INTENT_USAGE_START, start)
+            .putExtra(INTENT_USAGE_END, end)
 }
 
-private const val INTENT_NETWORK_MAPS_TYPE = "mapsType"
-private const val INTENT_NETWORK_START = "start"
-private const val INTENT_NETWORK_END = "end"
+private const val INTENT_USAGE_MAPS_TYPE = "mapsType"
+private const val INTENT_USAGE_START = "start"
+private const val INTENT_USAGE_END = "end"
 
-class Act_NetworkAppList : BaseActivity() {
+class Act_AppUsageAppList : BaseActivity() {
 
     @Inject
     private lateinit var usageService: UsageService
     @Inject
     private lateinit var rxBus: RxBus
 
-    private lateinit var networkUsageMaps: NetworkStatsMaps
+    private lateinit var appUsageStatsMaps: AppUsageStatsMaps
 
-    private lateinit var mapsType: NetworkTimeType
+    private lateinit var mapsType: AppTimeType
     private lateinit var start: DateTime
     private lateinit var end: DateTime
-    private var showRx: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.setDisplayShowTitleEnabled(true)
-        updateToolbarSubtitleWithNetworkFilter(mapsType)
+        updateToolbarSubtitleWithAppFilter(mapsType)
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.act_network_app_list
+        return R.layout.act_appusage_app_list
     }
 
     override fun initVariables() {
-        networkUsageMaps = NetworkStatsMaps(packageManager)
+        appUsageStatsMaps = AppUsageStatsMaps(packageManager)
     }
 
     override fun loadParameters(extras: Bundle) {
-        mapsType = extras.getSerializable(INTENT_NETWORK_MAPS_TYPE) as NetworkTimeType
-        start = extras.getSerializable(INTENT_NETWORK_START) as DateTime
-        end = extras.getSerializable(INTENT_NETWORK_END) as DateTime
+        mapsType = extras.getSerializable(INTENT_USAGE_MAPS_TYPE) as AppTimeType
+        start = extras.getSerializable(INTENT_USAGE_START) as DateTime
+        end = extras.getSerializable(INTENT_USAGE_END) as DateTime
     }
 
     override fun loadInfos(savedInstanceState: Bundle) {
@@ -81,7 +80,7 @@ class Act_NetworkAppList : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
-        inflater.inflate(R.menu.act_network, menu)
+        inflater.inflate(R.menu.act_appusage, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -93,43 +92,32 @@ class Act_NetworkAppList : BaseActivity() {
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.today -> {
-                            mapsType = NetworkTimeType.TODAY
+                            mapsType = AppTimeType.DAY
                             start = DateTime.now().withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
-                            updateToolbarSubtitleWithNetworkFilter(mapsType)
+                            updateToolbarSubtitleWithAppFilter(mapsType)
                         }
                         R.id.week -> {
-                            mapsType = NetworkTimeType.WEEK
+                            mapsType = AppTimeType.WEEK
                             start = DateTime.now().minusDays(7).withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
-                            updateToolbarSubtitleWithNetworkFilter(mapsType)
+                            updateToolbarSubtitleWithAppFilter(mapsType)
                         }
                         R.id.month -> {
-                            mapsType = NetworkTimeType.MONTH
+                            mapsType = AppTimeType.MONTH
                             start = DateTime.now().minusMonths(1).withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
-                            updateToolbarSubtitleWithNetworkFilter(mapsType)
+                            updateToolbarSubtitleWithAppFilter(mapsType)
                         }
                         R.id.last_month -> {
-                            mapsType = NetworkTimeType.LAST_MONTH
-                            start = DateTime.now().minusMonths(2).withTimeAtStartOfDay()
-                            end = DateTime.now().minusMonths(1)
-                            update()
-                            updateToolbarSubtitleWithNetworkFilter(mapsType)
-                        }
-                        R.id.year -> {
-                            mapsType = NetworkTimeType.YEAR
+                            mapsType = AppTimeType.YEAR
                             start = DateTime.now().minusYears(1).withTimeAtStartOfDay()
                             end = DateTime.now()
                             update()
-                            updateToolbarSubtitleWithNetworkFilter(mapsType)
-                        }
-                        R.id.custom -> {
-                            mapsType = NetworkTimeType.CUSTOM
-
+                            updateToolbarSubtitleWithAppFilter(mapsType)
                         }
                     }
                     popupMenu.dismiss()
@@ -143,7 +131,7 @@ class Act_NetworkAppList : BaseActivity() {
 
     override fun initialize() {
         list.layoutManager = LinearLayoutManager(this)
-        list.adapter = NetworkStatsAppsAdapter(this, mutableListOf(), 0, showRx)
+        list.adapter = AppUsageStatsAdapter(this, mutableListOf(), 0)
 
         update()
 
@@ -164,7 +152,7 @@ class Act_NetworkAppList : BaseActivity() {
 
     private fun update() {
         loading.visibility = View.VISIBLE
-        (list.adapter as NetworkStatsAppsAdapter).setIsLoading(true)
+        (list.adapter as AppUsageStatsAdapter).setIsLoading(true)
 
         Handler().postDelayed({
             doAsync {
@@ -178,18 +166,20 @@ class Act_NetworkAppList : BaseActivity() {
     }
 
     private fun loadInfo() {
-        networkUsageMaps.update(usageService.loadNetworkDetailStats(UsageService.WIFI, start, end),
-                usageService.loadNetworkDetailStats(UsageService.MOBILE, start, end))
+        val usageStats = usageService.loadUsageStats(start, end)
+        val usageStatsSummary = usageService.loadUsageSummaryStats(start, end)
+
+        appUsageStatsMaps.update(usageStats, usageStatsSummary)
     }
 
     private fun updateViews() {
         loading.visibility = View.GONE
 
-        var appList = if (showRx) networkUsageMaps.all.rxByApp.toList() else networkUsageMaps.all.txByApp.toList()
-        appList = appList.sortedByDescending { it.second.valueDownload + it.second.valueUpload }
+        var appList = appUsageStatsMaps.totalUsage.toList()
+        appList = appList.sortedByDescending { it.second.timeInForeground }
 
-        (list.adapter as NetworkStatsAppsAdapter).swapItems(appList, if (showRx) networkUsageMaps.all.rxByAppTotal else networkUsageMaps.all.txByAppTotal, showRx)
-        (list.adapter as NetworkStatsAppsAdapter).setIsLoading(false)
+        (list.adapter as AppUsageStatsAdapter).swapItems(appList, appUsageStatsMaps.totalForeground)
+        (list.adapter as AppUsageStatsAdapter).setIsLoading(false)
     }
 }
 

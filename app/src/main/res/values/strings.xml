@@ -9,6 +9,7 @@
     <string name="unit_kilo">kB</string>
 
     <string name="time_today">Today</string>
+    <string name="time_day">Day</string>
     <string name="time_week">Week</string>
     <string name="time_month">Month</string>
     <string name="time_last_month">Last month</string>
@@ -22,18 +23,24 @@
 
     <string name="network_rx_bytes_title">Dati ricevuti</string>
     <string name="network_rx_packets_title">Pacchetti ricevuti</string>
+    <string name="network_tx_bytes_title">Dati inviati</string>
+    <string name="network_tx_packets_title">Pacchetti inviati</string>
     <string name="network_default_value">0</string>
     <string name="network_value_format">%.2f</string>
     <string name="network_value_format_no_point">%.0f</string>
     <string name="network_packet_format">%.0fk</string>
     <string name="network_packet_format2">%d</string>
     <string name="network_packet_unit">Pacchetti</string>
-    <string name="network_bubble_format">%s\nWifi: %s   Mobile: %s</string>
+    <string name="network_bubble_format">%s - %s\nWifi: %s   Mobile: %s</string>
     <string name="network_switch_on">Received</string>
     <string name="network_switch_off">Sent</string>
+    <string name="network_most_used_app">Most used apps</string>
+    <string name="network_most_used_app_show_all">Show all</string>
 
     <string name="appusage_total_usage_title">Uso totale</string>
     <string name="appusage_perc_format">%.2f%%</string>
+    <string name="appusage_most_used_app">Most used apps</string>
+    <string name="appusage_most_used_app_show_all">Show all</string>
 
     <string name="transition_app_icon">appIcon</string>
     <string name="transition_app_name">appName</string>

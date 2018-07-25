@@ -142,7 +142,7 @@ public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> 
             if (!dataSet.isHighlightEnabled())
                 continue;
 
-            mHighlightBuffer.addAll(buildHighlights(dataSet, i, xVal, DataSet.Rounding.CLOSEST));
+            mHighlightBuffer.addAll(buildHighlights(dataSet, i, xVal, DataSet.Rounding.UP));
         }
 
         return mHighlightBuffer;

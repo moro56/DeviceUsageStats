@@ -62,7 +62,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:text="50%"
                 android:textColor="@color/text_white_primary" />
         </FrameLayout>
 

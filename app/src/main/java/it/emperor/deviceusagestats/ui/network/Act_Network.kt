@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.PopupMenu
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
@@ -17,7 +16,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.github.mikephil.charting.components.MarkerImage
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
@@ -31,7 +29,7 @@ import it.emperor.deviceusagestats.events.AppDetailEvent
 import it.emperor.deviceusagestats.extensions.formatBytes
 import it.emperor.deviceusagestats.extensions.formatBytesWithDecimal
 import it.emperor.deviceusagestats.extensions.px
-import it.emperor.deviceusagestats.models.TimeType
+import it.emperor.deviceusagestats.models.NetworkTimeType
 import it.emperor.deviceusagestats.services.UsageService
 import it.emperor.deviceusagestats.ui.base.BaseActivity
 import it.emperor.deviceusagestats.ui.detail.appDetail
@@ -54,7 +52,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
     private lateinit var usageService: UsageService
 
     private lateinit var networkUsageMaps: NetworkStatsMaps
-    private lateinit var timeType: TimeType
+    private lateinit var timeType: NetworkTimeType
     private lateinit var start: DateTime
     private lateinit var end: DateTime
     private var showRx: Boolean = true
@@ -63,7 +61,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.setDisplayShowTitleEnabled(true)
-        updateToolbarSubtitleWithFilter(timeType)
+        updateToolbarSubtitleWithNetworkFilter(timeType)
     }
 
     override fun getLayoutId(): Int {
@@ -72,7 +70,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
 
     override fun initVariables() {
         networkUsageMaps = NetworkStatsMaps(packageManager)
-        timeType = TimeType.TODAY
+        timeType = NetworkTimeType.TODAY
         start = DateTime.now().withTimeAtStartOfDay()
         end = DateTime.now()
     }
@@ -101,42 +99,42 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
                     chart_bubble.visibility = View.GONE
                     when (it.itemId) {
                         R.id.today -> {
-                            timeType = TimeType.TODAY
+                            timeType = NetworkTimeType.TODAY
                             start = DateTime.now().withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(timeType)
-                            updateToolbarSubtitleWithFilter(timeType)
+                            update()
+                            updateToolbarSubtitleWithNetworkFilter(timeType)
                         }
                         R.id.week -> {
-                            timeType = TimeType.WEEK
+                            timeType = NetworkTimeType.WEEK
                             start = DateTime.now().minusDays(7).withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(timeType)
-                            updateToolbarSubtitleWithFilter(timeType)
+                            update()
+                            updateToolbarSubtitleWithNetworkFilter(timeType)
                         }
                         R.id.month -> {
-                            timeType = TimeType.MONTH
+                            timeType = NetworkTimeType.MONTH
                             start = DateTime.now().minusMonths(1).withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(timeType)
-                            updateToolbarSubtitleWithFilter(timeType)
+                            update()
+                            updateToolbarSubtitleWithNetworkFilter(timeType)
                         }
                         R.id.last_month -> {
-                            timeType = TimeType.LAST_MONTH
+                            timeType = NetworkTimeType.LAST_MONTH
                             start = DateTime.now().minusMonths(2).withTimeAtStartOfDay()
                             end = DateTime.now().minusMonths(1)
-                            update(timeType)
-                            updateToolbarSubtitleWithFilter(timeType)
+                            update()
+                            updateToolbarSubtitleWithNetworkFilter(timeType)
                         }
                         R.id.year -> {
-                            timeType = TimeType.YEAR
+                            timeType = NetworkTimeType.YEAR
                             start = DateTime.now().minusYears(1).withTimeAtStartOfDay()
                             end = DateTime.now()
-                            update(timeType)
-                            updateToolbarSubtitleWithFilter(timeType)
+                            update()
+                            updateToolbarSubtitleWithNetworkFilter(timeType)
                         }
                         R.id.custom -> {
-                            timeType = TimeType.CUSTOM
+                            timeType = NetworkTimeType.CUSTOM
 
                         }
                     }
@@ -154,13 +152,13 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         network_chart.isScaleYEnabled = false
         network_chart.legend.textColor = Color.WHITE
         network_chart.setViewPortOffsets(0f, 15f.px, 0f, 40f.px)
-        val marker = MarkerImage(this, R.drawable.ic_pin)
-        marker.setOffset((-4f).px, (-4f).px)
-        network_chart.marker = marker
+//        val marker = MarkerImage(this, R.drawable.ic_pin)
+//        marker.setOffset((-4f).px, (-4f).px)
+//        network_chart.marker = marker
         network_chart.setOnChartValueSelectedListener(this)
 
         val xAxis: XAxis = network_chart.xAxis
-        xAxis.gridColor = ContextCompat.getColor(this, R.color.system_background_light)
+        xAxis.gridColor = getColor(R.color.system_background_light)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.textColor = Color.WHITE
         xAxis.setAvoidFirstLastClipping(true)
@@ -175,7 +173,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         val yAxisRight: YAxis = network_chart.axisRight
         yAxisRight.isEnabled = false
 
-        update(timeType)
+        update()
 
         rx_tx_switch.setOnCheckedChangeListener { _, checked ->
             run {
@@ -183,8 +181,10 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
                 chart_bubble.visibility = View.GONE
                 network_chart.hideHighlight()
                 if (checked) {
+                    bytes_title.text = getString(R.string.network_rx_bytes_title)
                     rx_tx_switch.text = getString(R.string.network_switch_on)
                 } else {
+                    bytes_title.text = getString(R.string.network_tx_bytes_title)
                     rx_tx_switch.text = getString(R.string.network_switch_off)
                 }
                 updateRxTx()
@@ -204,7 +204,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
 
     // FUNCTIONS
 
-    private fun update(timeType: TimeType) {
+    private fun update() {
         loading.visibility = View.VISIBLE
         rx_tx_switch.visibility = View.GONE
 
@@ -215,7 +215,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
 
         Handler().postDelayed({
             doAsync {
-                loadInfo(timeType)
+                loadInfo()
 
                 uiThread {
                     updateViews()
@@ -224,7 +224,7 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         }, 100)
     }
 
-    private fun loadInfo(timeType: TimeType) {
+    private fun loadInfo() {
         val wifi = usageService.loadNetworkSummaryForUserStats(UsageService.WIFI, start, end)
         val mobile = usageService.loadNetworkSummaryForUserStats(UsageService.MOBILE, start, end)
 
@@ -281,10 +281,11 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         wifiDataSet.setDrawFilled(true)
         wifiDataSet.setDrawValues(false)
         wifiDataSet.setDrawHorizontalHighlightIndicator(false)
-        wifiDataSet.highlightLineWidth = 0.5f.px
-        wifiDataSet.highLightColor = ContextCompat.getColor(this, R.color.system_background_dark)
-        wifiDataSet.color = ContextCompat.getColor(this, R.color.system_secondary)
-        wifiDataSet.fillColor = ContextCompat.getColor(this, R.color.system_secondary)
+        wifiDataSet.setDrawVerticalHighlightIndicator(false)
+//        wifiDataSet.highlightLineWidth = 0.5f.px
+//        wifiDataSet.highLightColor = ContextCompat.getColor(this, R.color.system_background_dark)
+        wifiDataSet.color = getColor(R.color.system_secondary)
+        wifiDataSet.fillColor = getColor(R.color.system_secondary)
         wifiDataSet.fillAlpha = 150
         wifiDataSet.axisDependency = YAxis.AxisDependency.LEFT
 
@@ -303,10 +304,11 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
         mobileDataSet.setDrawFilled(true)
         mobileDataSet.setDrawValues(false)
         mobileDataSet.setDrawHorizontalHighlightIndicator(false)
-        mobileDataSet.highlightLineWidth = 0.5f.px
-        mobileDataSet.highLightColor = ContextCompat.getColor(this, R.color.system_background_light)
-        mobileDataSet.color = ContextCompat.getColor(this, R.color.system_tertiary)
-        mobileDataSet.fillColor = ContextCompat.getColor(this, R.color.system_tertiary)
+        mobileDataSet.setDrawVerticalHighlightIndicator(false)
+//        mobileDataSet.highlightLineWidth = 0.5f.px
+//        mobileDataSet.highLightColor = ContextCompat.getColor(this, R.color.system_background_light)
+        mobileDataSet.color = getColor(R.color.system_tertiary)
+        mobileDataSet.fillColor = getColor(R.color.system_tertiary)
         mobileDataSet.fillAlpha = 150
         mobileDataSet.axisDependency = YAxis.AxisDependency.LEFT
 
@@ -343,12 +345,13 @@ class Act_Network : BaseActivity(), OnChartValueSelectedListener {
 
             try {
                 val xText = network_chart.xAxis.valueFormatter.getFormattedValue(x.toFloat(), null)
+                val xTextPrev = if (x >= 1) network_chart.xAxis.valueFormatter.getFormattedValue((x - 1).toFloat(), null) else ""
                 val xValue = networkUsageMaps.rxByTime[x]
                 val wifi = if (showRx) networkUsageMaps.wifi.rxByTime[xValue] else networkUsageMaps.wifi.txByTime[xValue]
                 val mobile = if (showRx) networkUsageMaps.mobile.rxByTime[xValue] else networkUsageMaps.mobile.txByTime[xValue]
 
                 chart_bubble.visibility = View.VISIBLE
-                chart_bubble.text = getString(R.string.network_bubble_format).format(xText, NetworkStatsInternal().formatValue(wifi?.toLong()), NetworkStatsInternal().formatValue(mobile?.toLong()))
+                chart_bubble.text = getString(R.string.network_bubble_format).format(xTextPrev, xText, NetworkStatsInternal().formatValue(wifi?.toLong()), NetworkStatsInternal().formatValue(mobile?.toLong()))
             } catch (ex: Exception) {
             }
         }
